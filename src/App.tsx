@@ -34,6 +34,14 @@ function App() {
       setPlayers(updatedPlayers);
   }
 
+  const onClearPlayer = (playerId: number) => {
+
+      const updatedPlayers = players.filter((player) => {
+          return player.id !== playerId;
+      })
+      setPlayers(updatedPlayers);
+  }
+
   const onClickRoleCalculator = () => {
       const playersWithRoles = givePlayersRoles(players);
       if (playersWithRoles) {
@@ -71,7 +79,7 @@ function App() {
         <Button disabled={players.length === 5 } onClick={() => addPlayer()}>Ajouter un joueur</Button>
         <Stack flexDirection={"row"}>
             {players.map((player) => (
-                <PlayerCard onClickRole={onClickRole} player={player} key={player.id}/>
+                <PlayerCard onClickRole={onClickRole} onClearPlayer={onClearPlayer} player={player} key={player.id}/>
             ))}
         </Stack>
         <Button variant="contained" disabled={players.length === 0} onClick={onClickRoleCalculator}>Choisir les rôles</Button>

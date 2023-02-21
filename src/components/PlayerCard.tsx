@@ -1,19 +1,23 @@
 import {Player} from "../types/Player";
-import {Card, CardContent, Typography} from "@mui/material";
+import {Card, CardContent, CardHeader, IconButton, Typography} from "@mui/material";
+import ClearIcon from '@mui/icons-material/Clear';
 import {RoleButton} from "./RoleButton";
 import {ROLES} from "../constants/Roles";
 
 interface Props {
     player: Player,
-    onClickRole: (role: string, playerId: number) => void}
+    onClickRole: (role: string, playerId: number) => void,
+    onClearPlayer: (playerId: number) => void,
+}
 
-export const PlayerCard = ({player, onClickRole}: Props): JSX.Element => {
+export const PlayerCard = ({player, onClickRole, onClearPlayer}: Props): JSX.Element => {
     return (
-
         <Card>
+            <CardHeader title={player.name} action={<IconButton onClick={() => onClearPlayer(player.id)} aria-label="delete">
+                    <ClearIcon />
+                </IconButton>}>
+            </CardHeader>
             <CardContent>
-                <Typography>{player.id}</Typography>
-                <Typography>{player.name}</Typography>
                 <Typography>Rôles</Typography>
                 {ROLES.map((role) => (
                     <RoleButton onClick={onClickRole} role={role} key={role} playerId={player.id}/>
