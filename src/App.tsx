@@ -1,32 +1,70 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import {Button, Stack, TextField} from "@mui/material";
+import {Player} from "./types/Player";
+import {PlayerCard} from "./components/PlayerCard";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [newPlayerName, setNewPlayerName] = useState<string>('');
+
+  const onClickWantedRole = (role: string, playerId: number) => {
+      const updatedPlayers = players.map((player) => {
+          if (player.id === playerId) {
+              const updatedWantedRoles = player.wantedRoles.includes(role) ? player.wantedRoles.filter((wantedRole) => wantedRole !== role) : [...player.wantedRoles, role];
+              return {...player, wantedRoles: updatedWantedRoles};
+          }
+          return player;
+      })
+      setPlayers(updatedPlayers);
+  }
+
+  const onClickBannedRole = (role: string, playerId: number) => {
+      const updatedPlayers = players.map((player) => {
+          if (player.id === playerId) {
+              const updatedUnwantedRoles = player.unwantedRoles.includes(role) ? player.unwantedRoles.filter((unwantedRole) => unwantedRole !== role) : [...player.unwantedRoles, role];
+              return {...player, unwantedRoles: updatedUnwantedRoles};
+          }
+          return player;
+      })
+      setPlayers(updatedPlayers);
+  }
+
+
+  const addPlayer = () => {
+      if (newPlayerName.length === 0) {
+          alert('Merci de choisir un nom au préalable.');
+          return;
+      }
+      setPlayers([...players, {
+          id: players.length + 1,
+          name: newPlayerName,
+          unwantedRoles: [],
+          wantedRoles: [],
+          givenRole: "",
+      }])
+      setNewPlayerName('');
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/public/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <TextField
+            id="outlined-controlled"
+            label="Nom du nouveau joueur"
+            value={newPlayerName}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setNewPlayerName(event.target.value);
+            }}
+        />
+        <Button onClick={() => addPlayer()}>Ajouter un joueur</Button>
+        <Stack flexDirection={"row"}>
+            {players.map((player) => (
+                <PlayerCard onClickWantedRole={onClickWantedRole} onClickBannedRole={onClickBannedRole} player={player} key={player.id}/>
+            ))}
+        </Stack>
+        <Button variant="contained" onClick={() => alert("TBD")}>Choisir les rôles</Button>
+
     </div>
   )
 }
