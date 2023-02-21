@@ -1,7 +1,6 @@
 import {Player} from "../types/Player";
 
-
-export const allUsersHaveAtLeastOnePlayableRole = (players: Player[]) => {
+const allUsersHaveAtLeastOnePlayableRole = (players: Player[]) => {
     const playersWithNoRoleAvailable = players.filter((player) => player.acceptedRoles.length === 0);
     if (playersWithNoRoleAvailable.length > 0) {
         alert('Tous les joueurs doivent accepter au moins un rôle !');
@@ -11,9 +10,22 @@ export const allUsersHaveAtLeastOnePlayableRole = (players: Player[]) => {
     return true;
 }
 
+const verifyThereIsMoreRolesAvailableThanPlayers = (players: Player[]) => {
+    let askedRoles: string[] = [];
+    players.forEach((player) => askedRoles = [...askedRoles, ...player.acceptedRoles]);
+    let uniqueAskedRoles = [...new Set(askedRoles)]; // remove duplicates
+
+    if (uniqueAskedRoles.length < players.length) {
+        alert(`Vous avez plus de joueurs que de rôles différents 😭 ! (${uniqueAskedRoles.join(', ')}) `);
+        return false;
+    }
+
+    return true;
+}
+
 export const givePlayersRoles = (players: Player[]) => {
 
-    if (!allUsersHaveAtLeastOnePlayableRole(players)) {
+    if (!allUsersHaveAtLeastOnePlayableRole(players) || !verifyThereIsMoreRolesAvailableThanPlayers(players)) {
         return false;
     }
 
@@ -39,7 +51,7 @@ export const givePlayersRoles = (players: Player[]) => {
         console.log(tentatives);
 
         // pour chaque joueur, on donne un poste random parmi ses choix // pour la v1 UNIQUEMENT, si ca donne un truc unique ba on propose et voila
-        let alreadyGivenRoles = [''];
+        let alreadyGivenRoles: string[] = [];
         let nextTry = false;
         for (let player of copyPlayers) {
 
