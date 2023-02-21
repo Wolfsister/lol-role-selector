@@ -1,5 +1,5 @@
 import {Player} from "../types/Player";
-import {Card, CardContent, CardHeader, IconButton, Typography} from "@mui/material";
+import {Card, CardContent, CardHeader, CardMedia, IconButton, Typography} from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import {RoleButton} from "./RoleButton";
 import {ROLES} from "../constants/Roles";
@@ -17,6 +17,13 @@ export const PlayerCard = ({player, onClickRole, onClearPlayer}: Props): JSX.Ele
                     <ClearIcon />
                 </IconButton>}>
             </CardHeader>
+            <CardMedia
+                component="img"
+                height="194"
+                width="194"
+                image={`https://robohash.org/${player.id}${player.name}${player.randomHash}`}
+                alt="Paella dish"
+            />
             <CardContent>
                 <Typography>Rôles</Typography>
                 {ROLES.map((role) => (

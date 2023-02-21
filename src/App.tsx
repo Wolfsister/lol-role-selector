@@ -60,6 +60,7 @@ function App() {
           name: newPlayerName,
           acceptedRoles: ROLES,
           givenRole: "",
+          randomHash: Math.floor(Math.random()*2000),
       }])
       setNewPlayerName('');
   }
