@@ -1,15 +1,27 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-import {Button, Stack, TextField, Typography} from "@mui/material";
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    List,
+    ListItem,
+    ListItemText,
+    Stack,
+    TextField,
+    Typography
+} from "@mui/material";
 import {Player} from "./types/Player";
 import {PlayerCard} from "./components/PlayerCard";
-import {verifyAllUsersHaveAtLeastOnePlayableRole} from "./utils/roleCalculator";
+import {givePlayersRoles} from "./utils/roleCalculator";
 import {ROLES} from "./constants/Roles";
 
 function App() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [newPlayerName, setNewPlayerName] = useState<string>('');
+  const [openDialogPlayersRoles, setOpenDialogPlayersRoles] = useState<boolean>(false);
 
   const onClickRole = (clickedRole: string, playerId: number) => {
       const updatedPlayers = players.map((player) => {
@@ -23,7 +35,11 @@ function App() {
   }
 
   const onClickRoleCalculator = () => {
-      verifyAllUsersHaveAtLeastOnePlayableRole(players);
+      const playersWithRoles = givePlayersRoles(players);
+      if (playersWithRoles) {
+          setPlayers(playersWithRoles)
+          setOpenDialogPlayersRoles(true);
+      }
   }
 
   const addPlayer = () => {
@@ -59,6 +75,19 @@ function App() {
             ))}
         </Stack>
         <Button variant="contained" disabled={players.length === 0} onClick={onClickRoleCalculator}>Choisir les rôles</Button>
+
+        <Dialog open={openDialogPlayersRoles} onClose={() => setOpenDialogPlayersRoles(false)}>
+            <DialogTitle>Composition trouvée !</DialogTitle>
+            <DialogContent>
+                <List>
+                {players.map((player) => (
+                    <ListItem key={player.id}>
+                        <ListItemText secondary={player.givenRole}>{player.name}</ListItemText>
+                    </ListItem>
+                ))}
+                </List>
+            </DialogContent>
+        </Dialog>
 
     </div>
   )
