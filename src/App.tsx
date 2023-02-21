@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-import {Button, Stack, TextField} from "@mui/material";
+import {Button, Stack, TextField, Typography} from "@mui/material";
 import {Player} from "./types/Player";
 import {PlayerCard} from "./components/PlayerCard";
 
@@ -49,6 +49,8 @@ function App() {
 
   return (
     <div className="App">
+        <Typography variant="h2" component="h1" sx={{textAlign: 'center'}}>Bienvenue sur votre sélecteur de rôle préféré !</Typography>
+        <Typography variant="h3" sx={{fontSize: 'medium', textAlign: 'center'}}> (l'unique ? j'ai pas cherché)</Typography>
         <TextField
             id="outlined-controlled"
             label="Nom du nouveau joueur"
@@ -63,7 +65,7 @@ function App() {
                 <PlayerCard onClickWantedRole={onClickWantedRole} onClickBannedRole={onClickBannedRole} player={player} key={player.id}/>
             ))}
         </Stack>
-        <Button variant="contained" onClick={() => alert("TBD")}>Choisir les rôles</Button>
+        <Button variant="contained" disabled={players.length === 0} onClick={() => alert("TBD")}>Choisir les rôles</Button>
 
     </div>
   )
