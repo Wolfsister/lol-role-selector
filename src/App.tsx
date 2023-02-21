@@ -68,7 +68,7 @@ function App() {
                 setNewPlayerName(event.target.value);
             }}
         />
-        <Button onClick={() => addPlayer()}>Ajouter un joueur</Button>
+        <Button disabled={players.length === 5 } onClick={() => addPlayer()}>Ajouter un joueur</Button>
         <Stack flexDirection={"row"}>
             {players.map((player) => (
                 <PlayerCard onClickRole={onClickRole} player={player} key={player.id}/>
