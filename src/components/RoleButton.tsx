@@ -4,19 +4,16 @@ import {useState} from "react";
 interface Props {
     onClick: (role: string, playerId: number) => void,
     role: string;
-    wantedRoleButton: boolean; // true if the button is for wanted roles, false if the button is for banned roles
     playerId: number;
 }
 
-export const RoleButton = ({onClick, role, wantedRoleButton, playerId}: Props) => {
-    const [selected, setSelected] = useState<boolean>(false);
-
-    const color = wantedRoleButton ? (selected ? "success" : "primary") : (selected ? "error" : "primary");
+export const RoleButton = ({onClick, role, playerId}: Props) => {
+    const [wanted, setWanted] = useState<boolean>(true);
 
     return (
-        <Button variant="contained" color={color} onClick={() => {
+        <Button variant="contained" color={wanted ? "success" : "error"} onClick={() => {
             onClick(role, playerId);
-            setSelected(!selected);
+            setWanted(!wanted);
         }}>{role}</Button>
     )
 }

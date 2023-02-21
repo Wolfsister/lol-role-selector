@@ -4,33 +4,27 @@ import './App.css'
 import {Button, Stack, TextField, Typography} from "@mui/material";
 import {Player} from "./types/Player";
 import {PlayerCard} from "./components/PlayerCard";
+import {verifyAllUsersHaveAtLeastOnePlayableRole} from "./utils/roleCalculator";
+import {ROLES} from "./constants/Roles";
 
 function App() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [newPlayerName, setNewPlayerName] = useState<string>('');
 
-  const onClickWantedRole = (role: string, playerId: number) => {
+  const onClickRole = (clickedRole: string, playerId: number) => {
       const updatedPlayers = players.map((player) => {
           if (player.id === playerId) {
-              const updatedWantedRoles = player.wantedRoles.includes(role) ? player.wantedRoles.filter((wantedRole) => wantedRole !== role) : [...player.wantedRoles, role];
-              return {...player, wantedRoles: updatedWantedRoles};
+              const updatedAcceptedRoles = player.acceptedRoles.includes(clickedRole) ? player.acceptedRoles.filter((acceptedRole) => acceptedRole !== clickedRole) : [...player.acceptedRoles, clickedRole];
+              return {...player, acceptedRoles: updatedAcceptedRoles};
           }
           return player;
       })
       setPlayers(updatedPlayers);
   }
 
-  const onClickBannedRole = (role: string, playerId: number) => {
-      const updatedPlayers = players.map((player) => {
-          if (player.id === playerId) {
-              const updatedUnwantedRoles = player.unwantedRoles.includes(role) ? player.unwantedRoles.filter((unwantedRole) => unwantedRole !== role) : [...player.unwantedRoles, role];
-              return {...player, unwantedRoles: updatedUnwantedRoles};
-          }
-          return player;
-      })
-      setPlayers(updatedPlayers);
+  const onClickRoleCalculator = () => {
+      verifyAllUsersHaveAtLeastOnePlayableRole(players);
   }
-
 
   const addPlayer = () => {
       if (newPlayerName.length === 0) {
@@ -40,8 +34,7 @@ function App() {
       setPlayers([...players, {
           id: players.length + 1,
           name: newPlayerName,
-          unwantedRoles: [],
-          wantedRoles: [],
+          acceptedRoles: ROLES,
           givenRole: "",
       }])
       setNewPlayerName('');
@@ -62,10 +55,10 @@ function App() {
         <Button onClick={() => addPlayer()}>Ajouter un joueur</Button>
         <Stack flexDirection={"row"}>
             {players.map((player) => (
-                <PlayerCard onClickWantedRole={onClickWantedRole} onClickBannedRole={onClickBannedRole} player={player} key={player.id}/>
+                <PlayerCard onClickRole={onClickRole} player={player} key={player.id}/>
             ))}
         </Stack>
-        <Button variant="contained" disabled={players.length === 0} onClick={() => alert("TBD")}>Choisir les rôles</Button>
+        <Button variant="contained" disabled={players.length === 0} onClick={onClickRoleCalculator}>Choisir les rôles</Button>
 
     </div>
   )
