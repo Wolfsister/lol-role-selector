@@ -4,7 +4,7 @@ import {
     Button,
     Dialog,
     DialogContent,
-    DialogTitle,
+    DialogTitle, Divider,
     List,
     ListItem,
     ListItemIcon,
@@ -100,14 +100,17 @@ function App() {
                     <DialogTitle>Composition trouvée !</DialogTitle>
                     <DialogContent>
                         <List>
-                            {players.map((player) => (
-                                <ListItem key={player.id}>
-                                    <ListItemIcon>
-                                        <RoleIcon role={player.givenRole}/>
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        secondary={player.givenRole.toUpperCase()}>{player.name}</ListItemText>
-                                </ListItem>
+                            {players.map((player, index) => (
+                                <>
+                                    <ListItem key={player.id}>
+                                        <ListItemIcon>
+                                            <RoleIcon role={player.givenRole}/>
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            secondary={player.givenRole.toUpperCase()}>{player.name}</ListItemText>
+                                    </ListItem>
+                                    {index !== players.length - 1 && <Divider variant="middle" component="li"/>}
+                                </>
                             ))}
                         </List>
                     </DialogContent>
