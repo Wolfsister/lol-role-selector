@@ -1,19 +1,26 @@
 import {Button} from "@mui/material";
 import {useState} from "react";
+import {RoleIcon} from "../icons/RoleIcon";
 
 interface Props {
-    onClick: (role: string, playerId: number) => void,
+    onClick: (role: string, playerId: string) => void,
     role: string;
-    playerId: number;
+    playerId: string;
 }
 
 export const RoleButton = ({onClick, role, playerId}: Props) => {
     const [wanted, setWanted] = useState<boolean>(true);
 
     return (
-        <Button variant="contained" color={wanted ? "success" : "error"} onClick={() => {
-            onClick(role, playerId);
-            setWanted(!wanted);
-        }}>{role}</Button>
+        <Button variant="contained"
+                sx={{minWidth: "unset", paddingX: "4px"}}
+                color={wanted ? "success" : "error"}
+                onClick={() => {
+                    onClick(role, playerId);
+                    setWanted(!wanted);
+                }}>
+            <RoleIcon role={role}/>
+        </Button>
+
     )
 }
