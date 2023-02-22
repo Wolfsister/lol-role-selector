@@ -81,7 +81,7 @@ function App() {
             />
             <Button disabled={players.length === 5} onClick={() => addPlayer()}>Ajouter un joueur</Button>
             </Stack>
-            <Stack gap={2} alignSelf={"center"} flexDirection={{xs: "column", md: "row"}}>
+            <Stack gap={2} justifyContent={"center"} width={"100vw"} flexWrap={"wrap"} alignSelf={"center"} flexDirection={"row"}>
                 {players.map((player) => (
                     <PlayerCard onClickRole={onClickRole} onClearPlayer={onClearPlayer} player={player}
                                 key={player.id}/>
