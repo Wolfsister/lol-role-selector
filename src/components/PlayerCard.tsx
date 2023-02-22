@@ -6,8 +6,8 @@ import {ROLES} from "../constants/Roles";
 
 interface Props {
     player: Player,
-    onClickRole: (role: string, playerId: number) => void,
-    onClearPlayer: (playerId: number) => void,
+    onClickRole: (role: string, playerId: string) => void,
+    onClearPlayer: (playerId: string) => void,
 }
 
 export const PlayerCard = ({player, onClickRole, onClearPlayer}: Props): JSX.Element => {

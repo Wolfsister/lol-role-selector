@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, KeyboardEvent} from 'react'
 import './App.css'
 import {
     Button,
@@ -24,7 +24,13 @@ function App() {
     const [newPlayerName, setNewPlayerName] = useState<string>('');
     const [openDialogPlayersRoles, setOpenDialogPlayersRoles] = useState<boolean>(false);
 
-    const onClickRole = (clickedRole: string, playerId: number) => {
+    const onKeyDownInputAddPlayer = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            addPlayer();
+        }
+    }
+
+    const onClickRole = (clickedRole: string, playerId: string) => {
         const updatedPlayers = players.map((player) => {
             if (player.id === playerId) {
                 const updatedAcceptedRoles = player.acceptedRoles.includes(clickedRole) ? player.acceptedRoles.filter((acceptedRole) => acceptedRole !== clickedRole) : [...player.acceptedRoles, clickedRole];
@@ -35,7 +41,7 @@ function App() {
         setPlayers(updatedPlayers);
     }
 
-    const onClearPlayer = (playerId: number) => {
+    const onClearPlayer = (playerId: string) => {
 
         const updatedPlayers = players.filter((player) => {
             return player.id !== playerId;
@@ -56,8 +62,14 @@ function App() {
             alert('Merci de choisir un nom au préalable.');
             return;
         }
+
+        if (players.length >= 5) {
+            alert('Vous avez atteint le nombre maximum de joueurs.');
+            return;
+        }
+
         setPlayers([...players, {
-            id: players.length + 1,
+            id:  Date.now().toString(36),
             name: newPlayerName,
             acceptedRoles: ROLES,
             givenRole: "",
@@ -73,15 +85,17 @@ function App() {
                     préféré !</Typography>
                 <Typography variant="h3" sx={{fontSize: 'medium', textAlign: 'center'}}> (l'unique ? j'ai pas
                     cherché)</Typography>
-                <Stack alignSelf={"center"} flexDirection={"row"} gap={2}><TextField
-                    id="outlined-controlled"
-                    label="Nom du nouveau joueur"
-                    value={newPlayerName}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        setNewPlayerName(event.target.value);
-                    }}
-                />
-                    <Button disabled={players.length === 5} onClick={() => addPlayer()}>Ajouter un joueur</Button>
+                <Stack alignSelf={"center"} flexDirection={"row"} gap={2}>
+                    <TextField
+                        id="outlined-controlled"
+                        label="Nom du nouveau joueur"
+                        value={newPlayerName}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            setNewPlayerName(event.target.value);
+                        }}
+                        onKeyDown={onKeyDownInputAddPlayer}
+                    />
+                    <Button disabled={players.length >= 5} onClick={() => addPlayer()}>Ajouter un joueur</Button>
                 </Stack>
                 <Stack gap={2} justifyContent={"center"} width={"100vw"} flexWrap={"wrap"} alignSelf={"center"}
                        flexDirection={"row"}>
@@ -101,16 +115,16 @@ function App() {
                     <DialogContent>
                         <List>
                             {players.map((player, index) => (
-                                <>
-                                    <ListItem key={player.id}>
+                                <div key={player.id}>
+                                    <ListItem>
                                         <ListItemIcon>
                                             <RoleIcon role={player.givenRole}/>
                                         </ListItemIcon>
                                         <ListItemText
                                             secondary={player.givenRole.toUpperCase()}>{player.name}</ListItemText>
                                     </ListItem>
-                                    {index !== players.length - 1 && <Divider variant="middle" component="li"/>}
-                                </>
+                                    {index !== players.length - 1 && <Divider variant="middle"/>}
+                                </div>
                             ))}
                         </List>
                     </DialogContent>

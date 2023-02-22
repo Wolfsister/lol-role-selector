@@ -3,9 +3,9 @@ import {useState} from "react";
 import {RoleIcon} from "../icons/RoleIcon";
 
 interface Props {
-    onClick: (role: string, playerId: number) => void,
+    onClick: (role: string, playerId: string) => void,
     role: string;
-    playerId: number;
+    playerId: string;
 }
 
 export const RoleButton = ({onClick, role, playerId}: Props) => {
