@@ -70,8 +70,6 @@ export const givePlayersRoles = (players: Player[]) => {
             continue;
         }
 
-        console.log('Solution found !');
-        console.log(copyPlayers);
         found = true;
     }
 
