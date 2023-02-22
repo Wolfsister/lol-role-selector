@@ -28,7 +28,6 @@ export const givePlayersRoles = (players: Player[]) => {
     if (!allUsersHaveAtLeastOnePlayableRole(players) || !verifyThereIsMoreRolesAvailableThanPlayers(players)) {
         return false;
     }
-
     // TODO: add check qu'on a au moins un nombre de role choisi égal au nombre de joueurs total
 
     // Make a cloning to avoid modify the players state
