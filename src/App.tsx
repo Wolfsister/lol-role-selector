@@ -18,6 +18,7 @@ import {PlayerCard} from "./components/PlayerCard";
 import {givePlayersRoles} from "./utils/roleCalculator";
 import {ROLES} from "./constants/Roles";
 import {RoleIcon} from "./icons/RoleIcon";
+import {PRIMARY_COLOR} from "./constants/style/Colors";
 
 function App() {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -81,12 +82,29 @@ function App() {
     return (
         <div className="App">
             <Stack gap={"10px"}>
-                <Typography variant="h2" component="h1" sx={{textAlign: 'center'}}>Bienvenue sur votre sélecteur de rôle
+                <Typography variant="h2" component="h1" sx={{cursor: "default", textAlign: 'center', color: PRIMARY_COLOR}}>Bienvenue sur votre sélecteur de rôle
                     préféré !</Typography>
-                <Typography variant="h3" sx={{fontSize: 'medium', textAlign: 'center'}}> (l'unique ? j'ai pas
-                    cherché)</Typography>
                 <Stack alignSelf={"center"} flexDirection={"row"} gap={2}>
                     <TextField
+                        sx={{  // input label when focused
+                            "& label.Mui-focused": {
+                                color: PRIMARY_COLOR
+                            },
+                            // focused color for input with variant='standard'
+                            "& .MuiInput-underline:after": {
+                                borderBottomColor: PRIMARY_COLOR
+                            },
+                            // focused color for input with variant='filled'
+                            "& .MuiFilledInput-underline:after": {
+                                borderBottomColor: PRIMARY_COLOR
+                            },
+                            // focused color for input with variant='outlined'
+                            "& .MuiOutlinedInput-root": {
+                                "&.Mui-focused fieldset": {
+                                    borderColor: PRIMARY_COLOR
+                                }
+                            }
+                            }}
                         id="outlined-controlled"
                         label="Nom du nouveau joueur"
                         value={newPlayerName}
@@ -95,7 +113,7 @@ function App() {
                         }}
                         onKeyDown={onKeyDownInputAddPlayer}
                     />
-                    <Button disabled={players.length >= 5} onClick={() => addPlayer()}>Ajouter un joueur</Button>
+                    <Button sx={{color: PRIMARY_COLOR}} disabled={players.length >= 5} onClick={() => addPlayer()}>Ajouter un joueur</Button>
                 </Stack>
                 <Stack gap={2} justifyContent={"center"} width={"100vw"} flexWrap={"wrap"} alignSelf={"center"}
                        flexDirection={"row"}>
@@ -105,7 +123,8 @@ function App() {
                     ))}
                 </Stack>
                 {players.length > 0 &&
-                    <Button sx={{width: "fit-content", alignSelf: "center"}} variant="contained"
+                    <Button sx={{width: "fit-content", alignSelf: "center", backgroundColor: PRIMARY_COLOR}}
+                            variant="contained"
                             disabled={players.length === 0} onClick={onClickRoleCalculator}>Choisir les
                         rôles</Button>
                 }

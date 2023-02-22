@@ -3,6 +3,7 @@ import {Card, CardContent, CardHeader, CardMedia, IconButton, Stack, Typography}
 import ClearIcon from '@mui/icons-material/Clear';
 import {RoleButton} from "./RoleButton";
 import {ROLES} from "../constants/Roles";
+import {PLAYER_CARD_BACKGROUND_COLOR, PLAYER_CARD_TITLE_COLOR, PRIMARY_COLOR} from "../constants/style/Colors";
 
 interface Props {
     player: Player,
@@ -12,8 +13,9 @@ interface Props {
 
 export const PlayerCard = ({player, onClickRole, onClearPlayer}: Props): JSX.Element => {
     return (
-        <Card sx={{width: {md: "250px"}}}>
+        <Card sx={{width: {md: "250px"}, backgroundColor: PLAYER_CARD_BACKGROUND_COLOR}}>
             <CardHeader title={player.name}
+                        sx={{color: PLAYER_CARD_TITLE_COLOR, cursor: "default"}}
                         action={<IconButton onClick={() => onClearPlayer(player.id)} aria-label="delete">
                             <ClearIcon/>
                         </IconButton>}>
@@ -26,7 +28,6 @@ export const PlayerCard = ({player, onClickRole, onClearPlayer}: Props): JSX.Ele
                 alt="Paella dish"
             />
             <CardContent>
-                <Typography>Rôles</Typography>
                 <Stack justifyContent={"center"} flexDirection={"row"} gap={1}>
                     {ROLES.map((role) => (
                         <RoleButton onClick={onClickRole} role={role} key={role} playerId={player.id}/>
