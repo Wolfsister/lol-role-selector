@@ -28,7 +28,6 @@ export const givePlayersRoles = (players: Player[]) => {
     if (!allUsersHaveAtLeastOnePlayableRole(players) || !verifyThereIsMoreRolesAvailableThanPlayers(players)) {
         return false;
     }
-    // TODO: add check qu'on a au moins un nombre de role choisi égal au nombre de joueurs total
 
     // Make a cloning to avoid modify the players state
     const copyPlayers = players.map((player) => ({...player}));
@@ -78,7 +77,7 @@ export const givePlayersRoles = (players: Player[]) => {
 
     if (found) {
         copyPlayers.sort((player1, player2) => {
-            return player1.id - player2.id;
+            return Number(player1.id) - Number(player2.id);
         })
         return copyPlayers;
     }
