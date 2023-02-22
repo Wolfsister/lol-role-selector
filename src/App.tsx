@@ -69,7 +69,7 @@ function App() {
         }
 
         setPlayers([...players, {
-            id:  Date.now().toString(36),
+            id:  Date.now().toString(),
             name: newPlayerName,
             acceptedRoles: ROLES,
             givenRole: "",
