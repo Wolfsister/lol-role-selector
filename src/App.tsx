@@ -7,6 +7,7 @@ import {
     DialogTitle,
     List,
     ListItem,
+    ListItemIcon,
     ListItemText,
     Stack,
     TextField,
@@ -16,6 +17,7 @@ import {Player} from "./types/Player";
 import {PlayerCard} from "./components/PlayerCard";
 import {givePlayersRoles} from "./utils/roleCalculator";
 import {ROLES} from "./constants/Roles";
+import {RoleIcon} from "./icons/RoleIcon";
 
 function App() {
     const [players, setPlayers] = useState<Player[]>([]);
@@ -67,43 +69,49 @@ function App() {
     return (
         <div className="App">
             <Stack gap={"10px"}>
-            <Typography variant="h2" component="h1" sx={{textAlign: 'center'}}>Bienvenue sur votre sélecteur de rôle
-                préféré !</Typography>
-            <Typography variant="h3" sx={{fontSize: 'medium', textAlign: 'center'}}> (l'unique ? j'ai pas
-                cherché)</Typography>
-            <Stack alignSelf={"center"} flexDirection={"row"} gap={2}><TextField
-                id="outlined-controlled"
-                label="Nom du nouveau joueur"
-                value={newPlayerName}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setNewPlayerName(event.target.value);
-                }}
-            />
-            <Button disabled={players.length === 5} onClick={() => addPlayer()}>Ajouter un joueur</Button>
-            </Stack>
-            <Stack gap={2} justifyContent={"center"} width={"100vw"} flexWrap={"wrap"} alignSelf={"center"} flexDirection={"row"}>
-                {players.map((player) => (
-                    <PlayerCard onClickRole={onClickRole} onClearPlayer={onClearPlayer} player={player}
-                                key={player.id}/>
-                ))}
-            </Stack>
-            {players.length > 0 &&
-                <Button sx={{width: "fit-content", alignSelf: "center"}} variant="contained" disabled={players.length === 0} onClick={onClickRoleCalculator}>Choisir les
-                    rôles</Button>
-            }
+                <Typography variant="h2" component="h1" sx={{textAlign: 'center'}}>Bienvenue sur votre sélecteur de rôle
+                    préféré !</Typography>
+                <Typography variant="h3" sx={{fontSize: 'medium', textAlign: 'center'}}> (l'unique ? j'ai pas
+                    cherché)</Typography>
+                <Stack alignSelf={"center"} flexDirection={"row"} gap={2}><TextField
+                    id="outlined-controlled"
+                    label="Nom du nouveau joueur"
+                    value={newPlayerName}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setNewPlayerName(event.target.value);
+                    }}
+                />
+                    <Button disabled={players.length === 5} onClick={() => addPlayer()}>Ajouter un joueur</Button>
+                </Stack>
+                <Stack gap={2} justifyContent={"center"} width={"100vw"} flexWrap={"wrap"} alignSelf={"center"}
+                       flexDirection={"row"}>
+                    {players.map((player) => (
+                        <PlayerCard onClickRole={onClickRole} onClearPlayer={onClearPlayer} player={player}
+                                    key={player.id}/>
+                    ))}
+                </Stack>
+                {players.length > 0 &&
+                    <Button sx={{width: "fit-content", alignSelf: "center"}} variant="contained"
+                            disabled={players.length === 0} onClick={onClickRoleCalculator}>Choisir les
+                        rôles</Button>
+                }
 
-            <Dialog open={openDialogPlayersRoles} onClose={() => setOpenDialogPlayersRoles(false)}>
-                <DialogTitle>Composition trouvée !</DialogTitle>
-                <DialogContent>
-                    <List>
-                        {players.map((player) => (
-                            <ListItem key={player.id}>
-                                <ListItemText secondary={player.givenRole}>{player.name}</ListItemText>
-                            </ListItem>
-                        ))}
-                    </List>
-                </DialogContent>
-            </Dialog>
+                <Dialog open={openDialogPlayersRoles} onClose={() => setOpenDialogPlayersRoles(false)}>
+                    <DialogTitle>Composition trouvée !</DialogTitle>
+                    <DialogContent>
+                        <List>
+                            {players.map((player) => (
+                                <ListItem key={player.id}>
+                                    <ListItemIcon>
+                                        <RoleIcon role={player.givenRole}/>
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        secondary={player.givenRole.toUpperCase()}>{player.name}</ListItemText>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </DialogContent>
+                </Dialog>
             </Stack>
         </div>
     )
