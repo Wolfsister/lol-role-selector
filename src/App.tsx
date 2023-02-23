@@ -19,11 +19,13 @@ import {givePlayersRoles} from "./utils/roleCalculator";
 import {ROLES} from "./constants/Roles";
 import {RoleIcon} from "./icons/RoleIcon";
 import {PRIMARY_COLOR} from "./constants/style/Colors";
+import {PORO_FILE_NAMES} from "./constants/style/Poros";
 
 function App() {
     const [players, setPlayers] = useState<Player[]>([]);
     const [newPlayerName, setNewPlayerName] = useState<string>('');
     const [openDialogPlayersRoles, setOpenDialogPlayersRoles] = useState<boolean>(false);
+    const [availablePoros, setAvailablePoros] = useState<string[]>(PORO_FILE_NAMES);
 
     const onKeyDownInputAddPlayer = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
@@ -44,10 +46,17 @@ function App() {
 
     const onClearPlayer = (playerId: string) => {
 
-        const updatedPlayers = players.filter((player) => {
-            return player.id !== playerId;
-        })
-        setPlayers(updatedPlayers);
+        const player = players.find((player) => player.id === playerId);
+        if (player) {
+
+            setAvailablePoros([...availablePoros, player.poroFileName]);
+
+            const updatedPlayers = players.filter((player) => {
+                return player.id !== playerId;
+            })
+            setPlayers(updatedPlayers);
+        }
+
     }
 
     const onClickRoleCalculator = () => {
@@ -69,12 +78,15 @@ function App() {
             return;
         }
 
+        const selectedPoroFileName = availablePoros[Math.floor(Math.random() * availablePoros.length)];
+        setAvailablePoros(availablePoros.filter((poroFileName) => poroFileName !== selectedPoroFileName));
+
         setPlayers([...players, {
             id:  Date.now().toString(),
             name: newPlayerName,
             acceptedRoles: ROLES,
             givenRole: "",
-            randomHash: Math.floor(Math.random() * 2000),
+            poroFileName: selectedPoroFileName,
         }])
         setNewPlayerName('');
     }

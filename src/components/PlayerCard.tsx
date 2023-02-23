@@ -24,7 +24,7 @@ export const PlayerCard = ({player, onClickRole, onClearPlayer}: Props): JSX.Ele
                 component="img"
                 height="194"
                 width="194"
-                image={`https://robohash.org/${player.id}${player.name}${player.randomHash}`}
+                image={`/poros/${player.poroFileName}`}
                 alt="Paella dish"
             />
             <CardContent>
