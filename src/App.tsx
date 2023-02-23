@@ -94,7 +94,7 @@ function App() {
     return (
         <div className="App">
             <Stack gap={"10px"}>
-                <Typography variant="h2" component="h1" sx={{cursor: "default", textAlign: 'center', color: PRIMARY_COLOR}}>Bienvenue sur votre sélecteur de rôle
+                <Typography variant="h3" component="h1" sx={{cursor: "default", textAlign: 'center', color: PRIMARY_COLOR}}>Bienvenue sur votre sélecteur de rôle
                     préféré !</Typography>
                 <Stack alignSelf={"center"} flexDirection={"row"} gap={2}>
                     <TextField
