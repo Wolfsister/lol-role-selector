@@ -1,4 +1,4 @@
-import {useState, KeyboardEvent} from 'react'
+import {useState, useEffect, KeyboardEvent} from 'react'
 import './App.css'
 import {
     Button,
@@ -20,9 +20,10 @@ import {ROLES} from "./constants/Roles";
 import {RoleIcon} from "./icons/RoleIcon";
 import {PRIMARY_COLOR} from "./constants/style/Colors";
 import {PORO_FILE_NAMES} from "./constants/style/Poros";
+import {PLAYERS_LOCAL_STORAGE_KEY} from "./constants/LocalStorage";
 
 function App() {
-    const [players, setPlayers] = useState<Player[]>([]);
+    const [players, setPlayers] = useState<Player[]>(localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY) ? JSON.parse(localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY)!) : []);
     const [newPlayerName, setNewPlayerName] = useState<string>('');
     const [openDialogPlayersRoles, setOpenDialogPlayersRoles] = useState<boolean>(false);
     const [availablePoros, setAvailablePoros] = useState<string[]>(PORO_FILE_NAMES);
@@ -90,6 +91,10 @@ function App() {
         }])
         setNewPlayerName('');
     }
+
+    useEffect(() => {
+        localStorage.setItem(PLAYERS_LOCAL_STORAGE_KEY, JSON.stringify(players));
+    }, [players]);
 
     return (
         <div className="App">

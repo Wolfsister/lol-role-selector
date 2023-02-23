@@ -1,0 +1,1 @@
+export const PLAYERS_LOCAL_STORAGE_KEY = "players";
