@@ -1,9 +1,9 @@
 import {Player} from "../types/Player";
-import {Card, CardContent, CardHeader, CardMedia, IconButton, Stack, Typography} from "@mui/material";
+import {Card, CardContent, CardHeader, CardMedia, IconButton, Stack} from "@mui/material";
 import ClearIcon from '@mui/icons-material/Clear';
 import {RoleButton} from "./RoleButton";
 import {ROLES} from "../constants/Roles";
-import {PLAYER_CARD_BACKGROUND_COLOR, PLAYER_CARD_TITLE_COLOR, PRIMARY_COLOR} from "../constants/style/Colors";
+import {PLAYER_CARD_BACKGROUND_COLOR, PLAYER_CARD_TITLE_COLOR} from "../constants/style/Colors";
 
 interface Props {
     player: Player,
@@ -30,7 +30,7 @@ export const PlayerCard = ({player, onClickRole, onClearPlayer}: Props): JSX.Ele
             <CardContent>
                 <Stack justifyContent={"center"} flexDirection={"row"} gap={1}>
                     {ROLES.map((role) => (
-                        <RoleButton onClick={onClickRole} role={role} key={role} playerId={player.id}/>
+                        <RoleButton onClick={onClickRole} role={role} key={role} playerId={player.id} wanted={player.acceptedRoles.includes(role)}/>
                     ))}
                 </Stack>
 
