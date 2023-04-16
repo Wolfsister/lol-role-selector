@@ -22,11 +22,29 @@ import {PRIMARY_COLOR} from "./constants/style/Colors";
 import {PORO_FILE_NAMES} from "./constants/style/Poros";
 import {PLAYERS_LOCAL_STORAGE_KEY} from "./constants/LocalStorage";
 
+const getAvailablePorosFilenames = () => {
+    const playersFromPreviousSession = localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY) ? JSON.parse(localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY)!) : [];
+
+    if (playersFromPreviousSession.length === 0) {
+        return PORO_FILE_NAMES;
+    }
+
+    const takenPoros = playersFromPreviousSession.map((player: Player) => {
+        return player.poroFileName;
+    })
+
+    const availableNames =  PORO_FILE_NAMES.filter((filename) => !takenPoros.includes(filename));
+
+    return availableNames;
+}
+
 function App() {
+
+
     const [players, setPlayers] = useState<Player[]>(localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY) ? JSON.parse(localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY)!) : []);
     const [newPlayerName, setNewPlayerName] = useState<string>('');
     const [openDialogPlayersRoles, setOpenDialogPlayersRoles] = useState<boolean>(false);
-    const [availablePoros, setAvailablePoros] = useState<string[]>(PORO_FILE_NAMES);
+    const [availablePoros, setAvailablePoros] = useState<string[]>(getAvailablePorosFilenames());
 
     const onKeyDownInputAddPlayer = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
