@@ -1,6 +1,8 @@
 body {
   background-image: url('../public/wallpaper_map_lol.png');
   background-size: cover;
+  background-position: center;
+  background-color: #fff;
 }
 
 #root {
@@ -9,4 +11,6 @@ body {
   padding: 2rem;
   text-align: center;
   box-sizing: border-box;
+  align-self: flex-start;
+  margin-top: 50px;
 }
