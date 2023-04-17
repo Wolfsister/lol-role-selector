@@ -1,26 +1,14 @@
-import {useState, useEffect, KeyboardEvent} from 'react'
+import {KeyboardEvent, useEffect, useState} from 'react'
 import './App.css'
-import {
-    Button,
-    Dialog,
-    DialogContent,
-    DialogTitle, Divider,
-    List,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Stack,
-    TextField,
-    Typography
-} from "@mui/material";
+import {Box, Button, Dialog, DialogContent, DialogTitle, Stack, TextField, Typography} from "@mui/material";
 import {Player} from "./types/Player";
 import {PlayerCard} from "./components/PlayerCard";
 import {givePlayersRoles} from "./utils/roleCalculator";
 import {ROLES} from "./constants/Roles";
-import {RoleIcon} from "./icons/RoleIcon";
-import {PRIMARY_COLOR} from "./constants/style/Colors";
+import {PRIMARY_COLOR, WHITE_BACKGROUND} from "./constants/style/Colors";
 import {PORO_FILE_NAMES} from "./constants/style/Poros";
 import {PLAYERS_LOCAL_STORAGE_KEY} from "./constants/LocalStorage";
+import {PlayersList} from "./components/PlayersList";
 
 const getAvailablePorosFilenames = () => {
     const playersFromPreviousSession = localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY) ? JSON.parse(localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY)!) : [];
@@ -33,7 +21,7 @@ const getAvailablePorosFilenames = () => {
         return player.poroFileName;
     })
 
-    const availableNames =  PORO_FILE_NAMES.filter((filename) => !takenPoros.includes(filename));
+    const availableNames = PORO_FILE_NAMES.filter((filename) => !takenPoros.includes(filename));
 
     return availableNames;
 }
@@ -44,6 +32,7 @@ function App() {
     const [players, setPlayers] = useState<Player[]>(localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY) ? JSON.parse(localStorage.getItem(PLAYERS_LOCAL_STORAGE_KEY)!) : []);
     const [newPlayerName, setNewPlayerName] = useState<string>('');
     const [openDialogPlayersRoles, setOpenDialogPlayersRoles] = useState<boolean>(false);
+    const [displayPlayersRoles, setDisplayPlayersRoles] = useState<boolean>(false);
     const [availablePoros, setAvailablePoros] = useState<string[]>(getAvailablePorosFilenames());
 
     const onKeyDownInputAddPlayer = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -79,6 +68,7 @@ function App() {
     }
 
     const onClickRoleCalculator = () => {
+        setDisplayPlayersRoles(false);
         const playersWithRoles = givePlayersRoles(players);
         if (playersWithRoles) {
             setPlayers(playersWithRoles)
@@ -101,13 +91,18 @@ function App() {
         setAvailablePoros(availablePoros.filter((poroFileName) => poroFileName !== selectedPoroFileName));
 
         setPlayers([...players, {
-            id:  Date.now().toString(),
+            id: Date.now().toString(),
             name: newPlayerName,
             acceptedRoles: ROLES,
             givenRole: "",
             poroFileName: selectedPoroFileName,
         }])
         setNewPlayerName('');
+    }
+
+    const onCloseDialogPlayersRoles = () => {
+        setOpenDialogPlayersRoles(false);
+        setDisplayPlayersRoles(true);
     }
 
     useEffect(() => {
@@ -117,7 +112,9 @@ function App() {
     return (
         <div className="App">
             <Stack gap={"10px"}>
-                <Typography variant="h3" component="h1" sx={{cursor: "default", textAlign: 'center', color: PRIMARY_COLOR}}>Bienvenue sur votre sélecteur de rôle
+                <Typography variant="h3" component="h1"
+                            sx={{cursor: "default", textAlign: 'center', color: PRIMARY_COLOR}}>Bienvenue sur votre
+                    sélecteur de rôle
                     préféré !</Typography>
                 <Stack alignSelf={"center"} flexDirection={"row"} gap={2}>
                     <TextField
@@ -139,7 +136,7 @@ function App() {
                                     borderColor: PRIMARY_COLOR
                                 }
                             }
-                            }}
+                        }}
                         id="outlined-controlled"
                         label="Nom du nouveau joueur"
                         value={newPlayerName}
@@ -148,7 +145,8 @@ function App() {
                         }}
                         onKeyDown={onKeyDownInputAddPlayer}
                     />
-                    <Button sx={{color: PRIMARY_COLOR}} disabled={players.length >= 5} onClick={() => addPlayer()}>Ajouter un joueur</Button>
+                    <Button sx={{color: PRIMARY_COLOR}} disabled={players.length >= 5} onClick={() => addPlayer()}>Ajouter
+                        un joueur</Button>
                 </Stack>
                 <Stack gap={2} justifyContent={"center"} width={"100vw"} flexWrap={"wrap"} alignSelf={"center"}
                        flexDirection={"row"}>
@@ -164,25 +162,24 @@ function App() {
                         rôles</Button>
                 }
 
-                <Dialog open={openDialogPlayersRoles} onClose={() => setOpenDialogPlayersRoles(false)}>
+                <Dialog open={openDialogPlayersRoles} onClose={onCloseDialogPlayersRoles}>
                     <DialogTitle>Composition trouvée !</DialogTitle>
                     <DialogContent>
-                        <List>
-                            {players.map((player, index) => (
-                                <div key={player.id}>
-                                    <ListItem>
-                                        <ListItemIcon>
-                                            <RoleIcon role={player.givenRole}/>
-                                        </ListItemIcon>
-                                        <ListItemText
-                                            secondary={player.givenRole.toUpperCase()}>{player.name}</ListItemText>
-                                    </ListItem>
-                                    {index !== players.length - 1 && <Divider variant="middle"/>}
-                                </div>
-                            ))}
-                        </List>
+                        <PlayersList players={players}/>
                     </DialogContent>
                 </Dialog>
+
+                {displayPlayersRoles &&
+                    <Box sx={{
+                        width: "50%",
+                        backgroundColor: WHITE_BACKGROUND,
+                        margin: "auto",
+                        borderRadius: "4px",
+                        opacity: "80%"
+                    }}>
+                        <PlayersList players={players}/>
+                    </Box>
+                }
             </Stack>
         </div>
     )
